@@ -82,11 +82,10 @@ jobs:
       
   # Job to run Static Application Security Testing (SAST)
 # SAST Job
-# SAST Job
-# SAST Job
-sast:
-  runs-on: ubuntu-latest
-  steps:
+
+  sast:
+    runs-on: ubuntu-latest
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
