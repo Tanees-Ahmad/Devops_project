@@ -28,8 +28,9 @@ jobs:
 
     - name: Build and Push Docker Image (App)
       run: |
-        docker build -t tanees012/app:${{ github.sha }} -f ./project/Dockerfile
-        docker push tanees012/app:${{ github.sha }}
+    	docker buildx build -t tanees012/app:${{ github.sha }} -f ./project/Dockerfile ./project
+    	docker push tanees012/app:${{ github.sha }}
+
 
       
   # Job to run Unit Tests
