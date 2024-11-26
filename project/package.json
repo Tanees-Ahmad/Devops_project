@@ -4,7 +4,7 @@
   "description": "Here we will make the complete website of medical",
   "main": "index.js",
   "scripts": {
-    "test": "echo 'Running tests...' && exit 0",
+    "test": "jest",
     "lint": "eslint .",
     "start": "nodemon index.js"
   },
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "eslint": "^9.15.0",
-    "globals": "^15.12.0"
+    "globals": "^15.12.0",
+    "jest-junit": "^16.0.0"
   }
 }

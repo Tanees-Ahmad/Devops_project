@@ -146,5 +146,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test-results  # This is the artifact's name
-        path: ./test-results  # Path to the directory where test results are stored
+        path: ./project/test-report.xml # Path to the directory where test results are stored
 
