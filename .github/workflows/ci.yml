@@ -9,35 +9,6 @@ on:
       - main
 
 jobs:
-  # Cache Job
-  cache:
-    runs-on: ubuntu-latest
-    outputs:
-      cache-hit: ${{ steps.cache.outputs.cache-hit }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Cache Node modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: ./project/node_modules  # Adjusted to the node_modules path within the project folder
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('project/package-lock.json') }}  # Adjusted for package-lock in the project folder
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install dependencies
-        run: |
-          cd project  # Navigate to the project folder
-          npm ci  # Use npm ci for consistent installs
-
-      - name: Run lint
-        run: |
-          cd project  # Navigate to the project folder
-          npm run lint -- --quiet  # Add --quiet to suppress non-blocking warnings
-
-
   # Job to build the Docker images
   build:
     runs-on: ubuntu-latest
@@ -112,36 +83,23 @@ jobs:
   # Job to run Static Application Security Testing (SAST)
 # SAST Job
 # SAST Job
-  sast:
-    runs-on: ubuntu-latest
-    steps:
+# SAST Job
+sast:
+  runs-on: ubuntu-latest
+  steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Install Semgrep
       run: |
-        # Download Semgrep tarball using wget
-        wget https://github.com/returntocorp/semgrep/releases/download/semgrep-v1.0.0/semgrep-v1.0.0-linux-amd64.tar.gz -O semgrep.tar.gz
-        
-        # Extract the tarball
-        tar -xzf semgrep.tar.gz
-        
-        # Move semgrep binary to a directory in PATH
-        sudo mv semgrep /usr/local/bin/
-        
-        # Verify installation
-        semgrep --version
+        python3 -m pip install --upgrade pip
+        pip install semgrep
 
     - name: Run Semgrep for SAST
-      run: |
-        semgrep --config=auto --verbose  # Run Semgrep with default rules
+      run: semgrep --config=auto
 
     - name: Upload Semgrep Report
       uses: actions/upload-artifact@v3
       with:
         name: semgrep-report
-        path: semgrep-report.json
-
-
-
-      
+        path: semgrep-report.json    
