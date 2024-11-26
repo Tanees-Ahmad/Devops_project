@@ -111,6 +111,7 @@ jobs:
       
   # Job to run Static Application Security Testing (SAST)
 # SAST Job
+# SAST Job
   sast:
     runs-on: ubuntu-latest
     steps:
@@ -119,12 +120,21 @@ jobs:
 
     - name: Install Semgrep
       run: |
-        sudo apt-get update
-        sudo apt-get install -y semgrep  # Install Semgrep directly from the package repository
+        # Download Semgrep tarball using wget
+        wget https://github.com/returntocorp/semgrep/releases/download/semgrep-v1.0.0/semgrep-v1.0.0-linux-amd64.tar.gz -O semgrep.tar.gz
+        
+        # Extract the tarball
+        tar -xzf semgrep.tar.gz
+        
+        # Move semgrep binary to a directory in PATH
+        sudo mv semgrep /usr/local/bin/
+        
+        # Verify installation
+        semgrep --version
 
     - name: Run Semgrep for SAST
       run: |
-        semgrep --config=auto --verbose  # Run Semgrep with auto rules
+        semgrep --config=auto --verbose  # Run Semgrep with default rules
 
     - name: Upload Semgrep Report
       uses: actions/upload-artifact@v3
