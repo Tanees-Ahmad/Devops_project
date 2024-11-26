@@ -35,7 +35,8 @@ jobs:
       - name: Run lint
         run: |
           cd project  # Navigate to the project folder
-          npm run lint
+          npm run lint -- --quiet  # Add --quiet to suppress non-blocking warnings
+
 
   # Job to build the Docker images
   build:
@@ -109,32 +110,28 @@ jobs:
 
       
   # Job to run Static Application Security Testing (SAST)
+# SAST Job
   sast:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install Semgrep Locally
-        run: |
-          # Download Semgrep release tarball (make sure the file is actually in .tar.gz format)
-          curl -sSL https://github.com/returntocorp/semgrep/releases/download/semgrep-v1.0.0/semgrep-v1.0.0-linux-amd64.tar.gz -o semgrep.tar.gz
+    - name: Install Semgrep
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y semgrep  # Install Semgrep directly from the package repository
 
-          # Check if the file is valid before extraction
-          file semgrep.tar.gz
+    - name: Run Semgrep for SAST
+      run: |
+        semgrep --config=auto --verbose  # Run Semgrep with auto rules
 
-          # Extract the tarball only if it's recognized as a gzip file
-          tar -xvzf semgrep.tar.gz
-          sudo mv semgrep /usr/local/bin/semgrep
+    - name: Upload Semgrep Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: semgrep-report
+        path: semgrep-report.json
 
-      - name: Run Semgrep for SAST
-        run: semgrep --config=auto . --json --output=semgrep-report.json
-
-      - name: Upload Semgrep Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: semgrep-report
-          path: semgrep-report.json
 
 
       
