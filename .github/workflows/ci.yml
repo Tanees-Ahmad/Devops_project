@@ -46,10 +46,13 @@ jobs:
         node-version: '16'
 
     - name: Install dependencies
+      working-directory: ./project
       run: npm install
 
     - name: Run Unit Tests (add sample test if not present)
+      working-directory: ./project
       run: npm test
+
       
   # Job to run Linter (Eslint)
   lint:
@@ -65,10 +68,13 @@ jobs:
         node-version: '16'
 
     - name: Install dependencies
+      working-directory: ./project
       run: npm install
 
     - name: Run Linter
+      working-directory: ./project
       run: npm run lint
+
       
   # Job to run Static Application Security Testing (SAST)
   sast:
