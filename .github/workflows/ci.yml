@@ -1,0 +1,110 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job to build the Docker images
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image (App)
+      run: |
+        docker build -t tanees012/app:${{ github.sha }} .
+        docker push tanees012/app:${{ github.sha }}
+
+    - name: Build and Push MongoDB Image (if needed)
+      run: |
+        docker build -t tanees012/mongo:${{ github.sha }} .
+        docker push tanees012/mongo:${{ github.sha }}
+      
+  # Job to run Unit Tests
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Unit Tests (add sample test if not present)
+      run: npm test
+      
+  # Job to run Linter (Eslint)
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Linter
+      run: npm run lint
+      
+  # Job to run Static Application Security Testing (SAST)
+  sast:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Install Semgrep
+      run: |
+        curl -sSL https://github.com/returntocorp/semgrep/releases/download/semgrep-v1.0.0/semgrep-v1.0.0-linux-amd64.tar.gz | tar xz
+        sudo mv semgrep /usr/local/bin/semgrep
+
+    - name: Run SAST Scan
+      run: semgrep --config=auto .
+      
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build, test, lint]
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Kubernetes
+      uses: Azure/setup-kubectl@v1
+      with:
+        version: 'v1.21.2'
+
+    - name: Set up Helm
+      uses: Helm/setup-helm@v1
+
+    - name: Helm Install/Upgrade
+      run: |
+        helm upgrade --install exp-app ./project/K8s --set image.tag=${{ github.sha }} --namespace default
