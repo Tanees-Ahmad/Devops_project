@@ -89,8 +89,9 @@ jobs:
 
       - name: Install Semgrep Locally
         run: |
-          curl -sSL https://github.com/returntocorp/semgrep/releases/latest/download/semgrep-linux-amd64.tar.gz -o semgrep.tar.gz
-          tar -xzf semgrep.tar.gz
+          # Download Semgrep using curl with the proper URL and extract it
+          curl -sSL https://github.com/returntocorp/semgrep/releases/download/semgrep-v1.0.0/semgrep-v1.0.0-linux-amd64.tar.gz -o semgrep.tar.gz
+          tar -xvzf semgrep.tar.gz
           sudo mv semgrep /usr/local/bin/semgrep
 
       - name: Run Semgrep for SAST
