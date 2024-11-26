@@ -133,3 +133,18 @@ jobs:
       with:
         name: semgrep-report
         path: semgrep-report.json    
+        
+# Job to upload test results as artifacts
+  upload-test-results:
+    needs: test  # This ensures the upload job runs after the 'test' job
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results  # This is the artifact's name
+        path: ./test-results  # Path to the directory where test results are stored
+
