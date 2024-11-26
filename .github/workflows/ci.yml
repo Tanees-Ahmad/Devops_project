@@ -56,6 +56,7 @@ jobs:
       
   # Job to run Linter (Eslint)
   # Lint Job
+# Lint Job
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -68,11 +69,15 @@ jobs:
         node-version: '18.20.4' # Ensure this matches your project's Node.js version
 
     - name: Install dependencies
-      run: npm install
+      run: |
+        cd project # Navigate to the directory containing package.json
+        npm install
 
     - name: Run ESLint
       run: |
+        cd project # Ensure we're in the right directory
         npx eslint . || echo "ESLint completed with offenses"
+
 
       
   # Job to run Static Application Security Testing (SAST)
