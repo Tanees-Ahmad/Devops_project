@@ -4,7 +4,7 @@
   "description": "Here we will make the complete website of medical",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "npx jest",
     "lint": "eslint .",
     "start": "nodemon index.js"
   },
