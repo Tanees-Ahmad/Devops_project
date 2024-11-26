@@ -31,10 +31,6 @@ jobs:
         docker build -t tanees012/app:${{ github.sha }} .
         docker push tanees012/app:${{ github.sha }}
 
-    - name: Build and Push MongoDB Image (if needed)
-      run: |
-        docker build -t tanees012/mongo:${{ github.sha }} .
-        docker push tanees012/mongo:${{ github.sha }}
       
   # Job to run Unit Tests
   test:
