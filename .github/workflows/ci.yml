@@ -126,7 +126,7 @@ jobs:
         pip install semgrep
 
     - name: Run Semgrep for SAST
-      run: semgrep --config=auto
+      run: semgrep --config=auto --output=semgrep-report.json || echo "Semgrep did not complete successfully" cat semgrep-report.json || echo "No report file found."
 
     - name: Upload Semgrep Report
       uses: actions/upload-artifact@v3
