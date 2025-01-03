@@ -148,11 +148,11 @@ jobs:
 
       - name: Initialize Terraform
         run: terraform init
-        working-directory: ./terraform
+        working-directory: ./terraform-k8s
 
       - name: Apply Terraform
         run: terraform apply -auto-approve
-        working-directory: ./terraform
+        working-directory: ./terraform-k8s
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3
