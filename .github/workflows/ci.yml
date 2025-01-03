@@ -148,8 +148,8 @@ jobs:
 
     - name: Set up GCP credentials
       run: |
-        echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > "${HOME}/gcloud-key.json"
-        gcloud auth activate-service-account --key-file="${HOME}/gcloud-key.json"
+        echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > "${/home/tanees/Downloads}/calcium-blend-444112-h5-d36f0ca0e471.json"
+        gcloud auth activate-service-account --key-file="${/home/tanees/Downloads}/calcium-blend-444112-h5-d36f0ca0e471.json"
 
     - name: Initialize Terraform
       run: terraform init
