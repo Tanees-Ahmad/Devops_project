@@ -2,9 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: exp-app
+  name: exp-app-{{ .Values.color }}
   labels:
     app: exp-app
+    color: {{ .Values.color }}
     app.kubernetes.io/managed-by: Helm
   annotations:
     meta.helm.sh/release-name: exp-app
@@ -14,10 +15,12 @@ spec:
   selector:
     matchLabels:
       app: exp-app
+      color: {{ .Values.color }}
   template:
     metadata:
       labels:
         app: exp-app
+        color: {{ .Values.color }}
     spec:
       containers:
         - name: web
@@ -27,3 +30,34 @@ spec:
           env:
             - name: MONGO_URI
               value: "mongodb://mongo-service:27017/programmer"
+              
+              
+
+
+
+# templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.color }}
+  labels:
+    app: {{ .Release.Name }}
+    color: {{ .Values.color }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      color: {{ .Values.color }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        color: {{ .Values.color }}
+    spec:
+      containers:
+      - name: myapp
+        image: my-docker-image:latest
+        ports:
+        - containerPort: 80
+

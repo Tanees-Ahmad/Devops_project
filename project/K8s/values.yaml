@@ -1,4 +1,7 @@
 replicaCount: 2
+# values.yaml
+color: blue
+
 
 image:
   repository: tanees012/exp-app

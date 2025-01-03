@@ -1,6 +1,6 @@
 provider "google" {
   project = "calcium-blend-444112-h5"
-  region  = "asia-south1"
+  region  = "asia-south2"
 }
 
 resource "google_container_cluster" "primary" {
@@ -26,6 +26,7 @@ resource "helm_release" "exp-app" {
   timeout    = 600
   values     = [file("../project/K8s/values.yaml")]
 }
+
 provider "helm" {
   kubernetes {
     config_path = "~/.kube/config"

@@ -19,6 +19,7 @@ metadata:
   name: exp-app-service
   labels:
     app: exp-app
+    color: {{ .Values.color }}
   annotations:
     meta.helm.sh/release-name: exp-app
     meta.helm.sh/release-namespace: default
@@ -26,6 +27,7 @@ spec:
   type: LoadBalancer
   selector:
     app: exp-app
+    color: {{ .Values.color }}
   ports:
     - protocol: TCP
       port: 3000
