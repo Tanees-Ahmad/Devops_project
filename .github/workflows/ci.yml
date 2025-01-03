@@ -146,11 +146,6 @@ jobs:
       with:
         terraform_version: 1.5.0
 
-    - name: Set up GCP credentials
-      run: |
-        echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > "${/home/tanees/Downloads}/calcium-blend-444112-h5-d36f0ca0e471.json"
-        gcloud auth activate-service-account --key-file="${/home/tanees/Downloads}/calcium-blend-444112-h5-d36f0ca0e471.json"
-
     - name: Initialize Terraform
       run: terraform init
       working-directory: ./terraform-k8s
@@ -158,6 +153,11 @@ jobs:
     - name: Apply Terraform
       run: terraform apply -auto-approve
       working-directory: ./terraform-k8s
+
+    - name: Set up Google Cloud Service Account
+      run: |
+        echo "${{ secrets.GCLOUD_KEY }}" > "${HOME}/gcloud-key.json"
+        gcloud auth activate-service-account --key-file="${HOME}/gcloud-key.json"
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
@@ -177,14 +177,15 @@ jobs:
     - name: Deploy Application Using Helm
       run: |
         helm upgrade --install exp-app ./project/K8s \
-          --set image.tag=${{ github.sha }} \
-          --set image.repository=tanees012/app \
-          --namespace default
+        --set image.tag=${{ github.sha }} \
+        --set image.repository=tanees012/app \
+        --namespace default
 
     - name: Verify Deployment
       run: |
         kubectl get pods -n default
         kubectl get svc -n default
+
 
         
 # Job to upload test results as artifacts
