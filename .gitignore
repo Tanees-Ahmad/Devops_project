@@ -20,3 +20,10 @@ coverage/
 .DS_Store
 Thumbs.db
 
+# Ignore Terraform files
+**/.terraform/
+terraform-k8s/.terraform/providers/registry.terraform.io/hashicorp/google/
+terraform-k8s/.terraform/providers/registry.terraform.io/hashicorp/kubernetes/
+terraform-k8s/.terraform/providers/registry.terraform.io/hashicorp/helm/
+
+
