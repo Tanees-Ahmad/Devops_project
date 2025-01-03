@@ -1,23 +1,26 @@
+# statefulset.yml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: exp-app
+  name: mongo
+  labels:
+    app: mongo
 spec:
-  serviceName: exp-app-service
+  serviceName: mongo-service
   replicas: 1
   selector:
     matchLabels:
-      app: exp-app
+      app: mongo
   template:
     metadata:
       labels:
-        app: exp-app
+        app: mongo
     spec:
       containers:
-        - name: web
-          image: tanees012/exp-app:latest
+        - name: mongo
+          image: mongo:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 27017
           volumeMounts:
             - name: mongo-data
               mountPath: /data/db
@@ -29,4 +32,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-

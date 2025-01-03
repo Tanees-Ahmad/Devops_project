@@ -1,9 +1,14 @@
+# deployment.yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: exp-app
   labels:
     app: exp-app
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: exp-app
+    meta.helm.sh/release-namespace: default
 spec:
   replicas: 1
   selector:
@@ -22,4 +27,3 @@ spec:
           env:
             - name: MONGO_URI
               value: "mongodb://mongo-service:27017/programmer"
-

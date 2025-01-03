@@ -6,6 +6,8 @@ const validationRoute = require('./routes/validationRoute');
 const app = express();
 const client = require('prom-client');
 
+
+
 // Create a Registry to register the metrics
 const register = new client.Registry();
 

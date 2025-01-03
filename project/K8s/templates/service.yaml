@@ -1,12 +1,33 @@
+# service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+  labels:
+    app: mongo
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+  type: ClusterIP
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: exp-app-service
+  labels:
+    app: exp-app
+  annotations:
+    meta.helm.sh/release-name: exp-app
+    meta.helm.sh/release-namespace: default
 spec:
-  clusterIP: None  # Headless service for StatefulSet
+  type: LoadBalancer
   selector:
     app: exp-app
   ports:
     - protocol: TCP
       port: 3000
-
+      targetPort: 3000
+  loadBalancerIP: 34.93.71.172
