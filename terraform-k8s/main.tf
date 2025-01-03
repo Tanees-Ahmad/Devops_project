@@ -4,8 +4,8 @@ provider "google" {
 }
 
 resource "google_container_cluster" "primary" {
-  name               = "new-kubernetes-cluster"
-  location           = "asia-south1"
+  name               = "newer-kubernetes-cluster"
+  location           = "asia-south2"
   initial_node_count = 1
   deletion_protection = false
 
